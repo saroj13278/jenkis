@@ -12,3 +12,11 @@ yum install jenkins -y
 
 
 systemctl start jenkins
+
+
+
+
+Packer
+
+packer plugins install github.com/hashicorp/amazon
+
