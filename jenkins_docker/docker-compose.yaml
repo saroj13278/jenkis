@@ -1,0 +1,35 @@
+ervices:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: /bin/bash -c "chown -R jenkins:jenkins /var/jenkins_home && /usr/local/bin/jenkins.sh"
+    networks:
+      - net
+  remote_host:
+    container_name: remote-host
+    build:
+      context: .          # The build context is the current directory
+    volumes:
+      - $PWD/aws-s3.sh:/tmp/script.sh
+    networks:
+      - net
+  db_host:
+    container_name: db
+    image: mysql:5.7
+    environment:
+      - "MYSQL_ROOT_PASSWORD=1234"
+    volumes:
+      - $PWD/db_data:/var/lib/mysql
+    networks:
+      - net
+volumes:
+  jenkins_home:
+networks:
+  net:
